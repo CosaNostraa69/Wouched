@@ -56,8 +56,7 @@ export default function  Register (){
   return (
     <>
     <NavBar />
-    <div className='w-full h-screen bg-white '>
-      <div className="flex flex-col text-center items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0 shadow-xl">
+    <div className="w-full h-screen bg-[url('/register.jpg')] bg-cover bg-center bg-no-repeat">      <div className="flex flex-col text-center items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0 shadow-xl">
 
         <div className="w-full bg-white rounded-lg shadow dark:border text-black md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">

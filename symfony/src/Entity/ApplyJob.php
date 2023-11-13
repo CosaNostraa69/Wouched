@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ApplyJobRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ApplyJobRepository::class)]
+#[ApiResource]
 class ApplyJob
 {
     #[ORM\Id]
@@ -14,16 +16,10 @@ class ApplyJob
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'applyJobs')]
-    private ?User $user = null;
-
-    #[ORM\ManyToOne(inversedBy: 'applyJobs')]
-    private ?Job $job = null;
-
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 80)]
+    #[ORM\Column(length: 50)]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -32,36 +28,19 @@ class ApplyJob
     #[ORM\Column(length: 255)]
     private ?string $cv = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 255)]
     private ?string $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'applyJobs')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(inversedBy: 'applyJobs')]
+    private ?Job $job = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getJob(): ?Job
-    {
-        return $this->job;
-    }
-
-    public function setJob(?Job $job): static
-    {
-        $this->job = $job;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -120,6 +99,30 @@ class ApplyJob
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getJob(): ?Job
+    {
+        return $this->job;
+    }
+
+    public function setJob(?Job $job): static
+    {
+        $this->job = $job;
 
         return $this;
     }

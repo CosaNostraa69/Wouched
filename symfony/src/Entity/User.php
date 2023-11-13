@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Post;
+use App\Controller\SignUpController;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +13,14 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ApiResource(
+    operations:[
+        new Post(
+            controller:SignUpController::class
+        ),
+    ]
+)]
+#[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -29,20 +40,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Job::class)]
-    private Collection $jobs;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ApplyJob::class)]
+    private Collection $applyJobs;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Bookmark::class)]
     private Collection $bookmarks;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: ApplyJob::class)]
-    private Collection $applyJobs;
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Job::class)]
+    private Collection $jobs;
 
     public function __construct()
     {
-        $this->jobs = new ArrayCollection();
-        $this->bookmarks = new ArrayCollection();
         $this->applyJobs = new ArrayCollection();
+        $this->bookmarks = new ArrayCollection();
+        $this->jobs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -116,29 +127,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Job>
+     * @return Collection<int, ApplyJob>
      */
-    public function getJobs(): Collection
+    public function getApplyJobs(): Collection
     {
-        return $this->jobs;
+        return $this->applyJobs;
     }
 
-    public function addJob(Job $job): static
+    public function addApplyJob(ApplyJob $applyJob): static
     {
-        if (!$this->jobs->contains($job)) {
-            $this->jobs->add($job);
-            $job->setUser($this);
+        if (!$this->applyJobs->contains($applyJob)) {
+            $this->applyJobs->add($applyJob);
+            $applyJob->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeJob(Job $job): static
+    public function removeApplyJob(ApplyJob $applyJob): static
     {
-        if ($this->jobs->removeElement($job)) {
+        if ($this->applyJobs->removeElement($applyJob)) {
             // set the owning side to null (unless already changed)
-            if ($job->getUser() === $this) {
-                $job->setUser(null);
+            if ($applyJob->getUser() === $this) {
+                $applyJob->setUser(null);
             }
         }
 
@@ -176,29 +187,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, ApplyJob>
+     * @return Collection<int, Job>
      */
-    public function getApplyJobs(): Collection
+    public function getJobs(): Collection
     {
-        return $this->applyJobs;
+        return $this->jobs;
     }
 
-    public function addApplyJob(ApplyJob $applyJob): static
+    public function addJob(Job $job): static
     {
-        if (!$this->applyJobs->contains($applyJob)) {
-            $this->applyJobs->add($applyJob);
-            $applyJob->setUser($this);
+        if (!$this->jobs->contains($job)) {
+            $this->jobs->add($job);
+            $job->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeApplyJob(ApplyJob $applyJob): static
+    public function removeJob(Job $job): static
     {
-        if ($this->applyJobs->removeElement($applyJob)) {
+        if ($this->jobs->removeElement($job)) {
             // set the owning side to null (unless already changed)
-            if ($applyJob->getUser() === $this) {
-                $applyJob->setUser(null);
+            if ($job->getUser() === $this) {
+                $job->setUser(null);
             }
         }
 

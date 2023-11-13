@@ -77,7 +77,7 @@ export default function JobDetails() {
             {
                 isLoading ? (
                     <div className='bg-gray w-full h-screen flex items-center flex-col justify-center'>
-                        <InfinitySpin width='200' color="#4f46e5" />
+                        <InfinitySpin width='200' color="#FF6600" />
                         <p className='text-xs uppercase'>Loading Resources Hold Tight...</p>
                     </div>
                 ) : (

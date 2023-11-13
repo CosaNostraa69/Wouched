@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\JobRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,6 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: JobRepository::class)]
+#[ApiResource]
 class Job
 {
     #[ORM\Id]
@@ -19,13 +21,13 @@ class Job
     #[ORM\Column(length: 50)]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column]
-    private ?int $salary = null;
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $salary = null;
 
-    #[ORM\Column(length: 80)]
+    #[ORM\Column(length: 50)]
     private ?string $company = null;
 
     #[ORM\Column(length: 80)]
@@ -46,19 +48,19 @@ class Job
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $job_deadline = null;
 
-    #[ORM\ManyToOne(inversedBy: 'jobs')]
-    private ?User $user = null;
+    #[ORM\OneToMany(mappedBy: 'job', targetEntity: ApplyJob::class)]
+    private Collection $applyJobs;
 
     #[ORM\OneToMany(mappedBy: 'job', targetEntity: Bookmark::class)]
     private Collection $bookmarks;
 
-    #[ORM\OneToMany(mappedBy: 'job', targetEntity: ApplyJob::class)]
-    private Collection $applyJobs;
+    #[ORM\ManyToOne(inversedBy: 'jobs')]
+    private ?User $user = null;
 
     public function __construct()
     {
-        $this->bookmarks = new ArrayCollection();
         $this->applyJobs = new ArrayCollection();
+        $this->bookmarks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -90,12 +92,12 @@ class Job
         return $this;
     }
 
-    public function getSalary(): ?int
+    public function getSalary(): ?string
     {
         return $this->salary;
     }
 
-    public function setSalary(int $salary): static
+    public function setSalary(string $salary): static
     {
         $this->salary = $salary;
 
@@ -186,14 +188,32 @@ class Job
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection<int, ApplyJob>
+     */
+    public function getApplyJobs(): Collection
     {
-        return $this->user;
+        return $this->applyJobs;
     }
 
-    public function setUser(?User $user): static
+    public function addApplyJob(ApplyJob $applyJob): static
     {
-        $this->user = $user;
+        if (!$this->applyJobs->contains($applyJob)) {
+            $this->applyJobs->add($applyJob);
+            $applyJob->setJob($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplyJob(ApplyJob $applyJob): static
+    {
+        if ($this->applyJobs->removeElement($applyJob)) {
+            // set the owning side to null (unless already changed)
+            if ($applyJob->getJob() === $this) {
+                $applyJob->setJob(null);
+            }
+        }
 
         return $this;
     }
@@ -228,32 +248,14 @@ class Job
         return $this;
     }
 
-    /**
-     * @return Collection<int, ApplyJob>
-     */
-    public function getApplyJobs(): Collection
+    public function getUser(): ?User
     {
-        return $this->applyJobs;
+        return $this->user;
     }
 
-    public function addApplyJob(ApplyJob $applyJob): static
+    public function setUser(?User $user): static
     {
-        if (!$this->applyJobs->contains($applyJob)) {
-            $this->applyJobs->add($applyJob);
-            $applyJob->setJob($this);
-        }
-
-        return $this;
-    }
-
-    public function removeApplyJob(ApplyJob $applyJob): static
-    {
-        if ($this->applyJobs->removeElement($applyJob)) {
-            // set the owning side to null (unless already changed)
-            if ($applyJob->getJob() === $this) {
-                $applyJob->setJob(null);
-            }
-        }
+        $this->user = $user;
 
         return $this;
     }

@@ -1,56 +1,40 @@
-import React, { useState , useEffect } from 'react'
-import Link from 'next/link'
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { register_me } from '@/Services/auth';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import NavBar from '@/components/NavBar';
+import jwt_decode, { jwtDecode } from 'jwt-decode';
 
+export default function Register() {
+    const router = useRouter();
 
-export default function  Register (){
-  const router = useRouter();
+    useEffect(() => {
+        if (Cookies.get('token')) {
+            router.push('/');
+        }
+    }, [router]);
+
+    const [formData, setFormData] = useState({ email: "", password: "", name: "" });
+    const [error, setError] = useState({ email: "", password: "", name: "" });
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+    
+      const response = await register_me(formData);
+    
+      if (response.success) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        const decoded = jwtDecode(response.token);
+        router.push('/');
+      } else {
+        toast.error(response.message || 'Échec ');
+      };
+    };
   
-  useEffect(() => {
-    if (Cookies.get('token')) {
-      router.push('/');
-    }
-  },[router])
-
-
- 
-
-
-  
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState({ email: "", password: "", name: '' });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.email) {
-      setError({ ...error, email: "Email Field is Required" })
-      return;
-    }
-    if (!formData.password) {
-      setError({ ...error, password: "Password Field is required" })
-      return;
-    }
-    if (!formData.name) {
-      setError({ ...error, name: "Name Field is required" })
-      return;
-    }
-
-    const data = await register_me(formData);
-    if (data.success) {
-      toast.success(data.message);
-      setTimeout(() => {
-        router.push('/auth/login');
-      }, 2000);
-    }
-    else {
-      toast.error(data.message);
-    }
-  }
 
 
   return (

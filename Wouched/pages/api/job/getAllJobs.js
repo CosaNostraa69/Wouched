@@ -1,5 +1,3 @@
-import ConnectDB from '@/DB/connectDB';
-import Job from '@/models/Job';
 
 
 

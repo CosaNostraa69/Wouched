@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ApiResource(
     operations:[
         new Post(
-            controller:SignUpController::class
+            controller: SignUpController::class
         ),
     ]
 )]

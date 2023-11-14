@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SignUpController extends AbstractController
 {
@@ -15,22 +17,19 @@ class SignUpController extends AbstractController
     private UserPasswordHasherInterface $passwordHasher;
 
     public function __construct(
-        EntityManagerInterface      $entityManager,
-        UserPasswordHasherInterface $passwordHasher,
-    )
-    {
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ) {
         $this->entityManager = $entityManager;
         $this->passwordHasher = $passwordHasher;
     }
 
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, JWTTokenManagerInterface $JWTManager): JsonResponse
     {
-        // Décode la requête.
         $requestContent = json_decode($request->getContent(), true);
 
-        // Si les clés "email" et "password" ne sont pas présentent dans la requête renvoie une erreur.
         if (!array_key_exists('email', $requestContent) || !array_key_exists('password', $requestContent)) {
-            return new Response('Un problème technique est survenu, veuillez réessayer ultérieurement', 500);
+            return new JsonResponse(['message' => 'Email et mot de passe requis'], Response::HTTP_BAD_REQUEST);
         }
 
         $userEmail = $requestContent['email'];
@@ -39,18 +38,18 @@ class SignUpController extends AbstractController
         $userRepository = $this->entityManager->getRepository(User::class);
         $registeredUser = $userRepository->findOneBy(['email' => $userEmail]);
 
-        // Si l'utilisateur est déjà enregistré renvoie une erreur.
         if ($registeredUser) {
-            return new Response('Adresse email déjà enregistrée', 409);
+            return new JsonResponse(['message' => 'Adresse email déjà enregistrée'], Response::HTTP_CONFLICT);
         }
 
-        // Hash le mot de passe de l'utilisateur et l'enregistre.
         $newUser = new User();
         $newUser->setEmail($userEmail);
         $newUser->setPassword($this->passwordHasher->hashPassword($newUser, $userPassword));
         $this->entityManager->persist($newUser);
         $this->entityManager->flush();
 
-        return new Response('OK', 200);
+        $token = $JWTManager->create($newUser);
+
+        return new JsonResponse(['token' => $token], Response::HTTP_OK);
     }
 }

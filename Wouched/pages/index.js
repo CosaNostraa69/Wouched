@@ -18,12 +18,6 @@ export default function Home() {
   const token = Cookies.get('token');
 
 
-  const { data, error, isLoading } = useSWR('/getAllJobs', get_job)
-
-  useEffect(() => {
-    if (data) dispatch(setJobData(data?.data))
-  }, [data, dispatch])
-
 
   useEffect(() => {
     if (token) {
@@ -53,21 +47,16 @@ export default function Home() {
         <meta name="language" content="en-US" />
       </Head>
 
-      {
-        isLoading ? (
-          <div className='bg-gray w-full h-screen flex items-center flex-col justify-center'>
-            <InfinitySpin width='200' color="#FF6600" />
-            <p className='text-xs uppercase'>Loading Resources Hold Tight...</p>
-          </div>
-        ) : (
+      
+   
           <>
             <NavBar />
             <div className="w-full h-screen bg-gray-200  text-black">
               <Intro />
             </div>
           </>
-        )
-      }
+        
+      
     </>
   )
 }

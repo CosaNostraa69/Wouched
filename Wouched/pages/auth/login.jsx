@@ -2,20 +2,21 @@ import React, { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { login_me } from '@/Services/auth';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import { setUserData } from '@/Utils/UserSlice';
 import NavBar from '@/components/NavBar';
 import Image from 'next/image';
+import { useAuth } from '@/Services/authContext';
 
 
 
 export default function Login() {
   const dispatch = useDispatch()
-
-
+  const router = useRouter();
+  const {user, authLoading} = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState({ email: "", password: "" });
 
@@ -37,7 +38,7 @@ export default function Login() {
       Cookies.set('token', res?.finalData?.token);
       localStorage.setItem('user', JSON.stringify(res?.finalData?.user));
       dispatch(setUserData(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null));
-      Router.push('/');
+      router.push('/');
     }
     else
     {
@@ -47,10 +48,18 @@ export default function Login() {
 
 
   useEffect(() => {
-    if (Cookies.get('token')) {
-      Router.push('/');
+    if (!authLoading){
+      console.log("authLoading finish");
+      if (user) {
+        router.push('/frontend/dashboard')
+      }
+      else{
+        console.log("no user");
+      }
     }
-  },[])
+  }, [user, authLoading])
+
+  
 
 
   return (

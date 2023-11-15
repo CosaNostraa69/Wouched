@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { BiLogOut } from 'react-icons/bi';
@@ -9,81 +9,44 @@ import { setUserData } from '@/Utils/UserSlice';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 import Image from 'next/image';
 
-
-
 export default function NavBar() {
     const dispatch = useDispatch();
-    const [openJobs, setOpenJobs] = useState(false)
-
-
-    useEffect(() => {
-        dispatch(setUserData(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null));
-    }, [dispatch])
-
-
+    const [openJobs, setOpenJobs] = useState(false);
     const Router = useRouter();
-    const user = useSelector(state => state.User.userData)
-
-
+    const user = useSelector(state => state.User.userData);
     const [isOpen, setIsOpen] = useState(false);
-
-    const [scrolled, isScrolled] = useState(false);
-
-
-    const useOutsideClick = (callback) => {
-        const ref = React.useRef();
-
-        React.useEffect(() => {
-            const handleClick = (event) => {
-                if (ref.current && !ref.current.contains(event.target)) {
-                    callback();
-                }
-            };
-
-            document.addEventListener('click', handleClick, true);
-
-            return () => {
-                document.removeEventListener('click', handleClick, true);
-            };
-        }, [ref]);
-
-        return ref;
-    };
-
+    const [scrolled, setScrolled] = useState(false);
+    const ref = useRef();
 
     useEffect(() => {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                isScrolled(true)
-            } else {
-                isScrolled(false)
-            }
-        })
-        return () => {
-            window.removeEventListener('scroll', () => {
-                if (window.scrollY > 20) {
-                    isScrolled(true)
-                } else {
-                    isScrolled(false)
-                }
-            })
-        }
-    }, [scrolled])
+        dispatch(setUserData(localStorage.getItem('token') ? localStorage.getItem('token') : null));
+    }, [dispatch]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const handleLogout = async () => {
         Cookies.remove('token');
-        localStorage.removeItem('user')
+        localStorage.removeItem('user');
         Router.reload();
-    }
-
-
-
-
-    const handleClickOutside = () => {
-        setIsOpen(false);
     };
-    const ref = useOutsideClick(handleClickOutside);
+
+    const handleClickOutside = (event) => {
+        if (ref.current && !ref.current.contains(event.target)) {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside, true);
+        return () => document.removeEventListener('click', handleClickOutside, true);
+    }, []);
 
     return (
         <>

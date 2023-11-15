@@ -11,6 +11,7 @@ import { BsFillBookmarkStarFill } from 'react-icons/bs'
 import { GiSuitcase } from 'react-icons/gi'
 import { InfinitySpin } from 'react-loader-spinner'
 import { useDispatch, useSelector } from 'react-redux'
+import { useAuth } from '@/Services/authContext'
 
 
 
@@ -20,15 +21,22 @@ export default function Dashboard() {
   const [loading , setLoading] = useState(true)
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const {user, authLoading} = useAuth();
   const activeUser = useSelector(state => state?.User?.userData)
   const id = activeUser?._id
 
   useEffect(() => {
-    if (!id || !Cookies.get('token')) {
-      router.push('/auth/login')
+    
+    if (!authLoading){
+      console.log("authLoading finish");
+      if (!user) {
+        router.push('/auth/login')
+      }
+      else {
+        setLoading(false)
+      }
     }
-  }, [activeUser, id, Cookies])
+  }, [user, authLoading])
 
   
 

@@ -5,15 +5,9 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Cookies from 'js-cookie';
 import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from '@/Services/authContext'; 
 
-
-
-
-export default function App({
-  Component,
-  pageProps: { session, ...pageProps },
-})
-{
+export default function App({ Component, pageProps: { session, ...pageProps }, }) {
   const router = useRouter();
 
   useEffect(() => {
@@ -29,9 +23,12 @@ export default function App({
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [router]);
+
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <AuthProvider> 
+        <Component {...pageProps} />
+      </AuthProvider>
     </Provider>
   )
 }

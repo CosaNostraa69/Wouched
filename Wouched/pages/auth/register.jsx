@@ -6,7 +6,7 @@ import { register_me } from '@/Services/auth';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import NavBar from '@/components/NavBar';
-import jwt_decode, { jwtDecode } from 'jwt-decode';
+import{ jwtDecode } from 'jwt-decode';
 
 export default function Register() {
     const router = useRouter();

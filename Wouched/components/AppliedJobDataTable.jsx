@@ -87,7 +87,7 @@ export default function AppliedJobDataTable() {
                             subHeader
                             persistTableHead
                             subHeaderComponent={
-                                <input className='w-60  py-2 px-2  outline-none  border-b-2 border-indigo-600' type={"search"}
+                                <input className='w-60  py-2 px-2  outline-none  border-b-2 border-orange-600' type={"search"}
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     placeholder={"Search with company name..."} />

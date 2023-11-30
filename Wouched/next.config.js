@@ -20,10 +20,10 @@ const nextConfig = {
     }),
 
   ],
-  entry: {
-    main: './src/index.tsx',
-    'pdf.worker': path.join(__dirname, './node_modules/pdfjs-dist/build/pdf.worker.min.js'),
-  },
+  // entry: {
+  //   main: './src/index.tsx',
+  //   'pdf.worker': path.join(__dirname, './node_modules/pdfjs-dist/build/pdf.worker.min.js'),
+  // },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].bundle.js'

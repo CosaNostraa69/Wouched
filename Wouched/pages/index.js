@@ -17,6 +17,8 @@ export default function Home() {
   const dispatch = useDispatch();
   const token = Cookies.get('token');
 
+  
+
 
 
   useEffect(() => {
@@ -40,7 +42,6 @@ export default function Home() {
         <meta name="description" content="Search and apply for the latest jobs in your field. Explore opportunities from top companies and make your career dreams come true." />
         <meta name="keywords" content="job portal, job search, career opportunities, employment, job listings, job openings, job vacancies, job postings, hiring, recruitment" />
         <meta name="robots" content="index, follow" />
-        {/* <link rel="canonical" href="https://job-portal-teal.vercel.app/" /> */}
         <meta name="author" content="CosaNostraa69" />
         <meta property="og:title" content="Find Your Dream Job | Job Portal Name" />
         <meta name="twitter:title" content="Find Your Dream Job | Job Portal Name" />

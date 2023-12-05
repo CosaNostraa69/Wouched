@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 
 export const register_me = async (formData) => {
     try {
-      const response = await fetch('http://localhost:8000/api/users', { // Remplacez par l'URL de votre API
+      const response = await fetch('http://localhost:8000/api/users', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/ld+json',
@@ -18,7 +18,7 @@ export const register_me = async (formData) => {
       }
   
       const data = await response.json();
-      return { success: true, token: data.token, user: data.user }; // Supposant que le token est retourné dans la réponse
+      return { success: true, token: data.token, user: data.user }; 
     } catch (error) {
       console.error('Erreur lors de l\'inscription:', error);
       return { success: false, message: error.message };
@@ -55,7 +55,7 @@ export const login_me = async (formData) => {
 
 export const forget_password = async (formData) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/forgetPassword`, {
+        const res = await fetch(`http://localhost:8000/api/forgetPassword`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -52,7 +52,7 @@ export default function SavedJobDataTable() {
         },
         {
             name: '',
-            cell: row => <button onClick={() => router.push(`/frontend/jobDetails/${row?.job?._id}`)} className='md:px-2 md:py-2 px-1 py-1 text-xs text-orange-600 hover:text-white my-2 hover:bg-orange-800 border border-orange-600   rounded transition-all duration-700  '>view Detail</button>,
+            cell: row => <button onClick={() => router.push(`/User/jobDetails/${row?.job?._id}`)} className='md:px-2 md:py-2 px-1 py-1 text-xs text-orange-600 hover:text-white my-2 hover:bg-orange-800 border border-orange-600   rounded transition-all duration-700  '>view Detail</button>,
         },
     ];
 

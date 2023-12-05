@@ -41,7 +41,7 @@ export default function Login() {
     if (!authLoading){
       console.log("authLoading finish");
       if (user) {
-        router.push('/frontend/dashboard')
+        router.push('/User/dashboard')
       }
       else{
         console.log("no user");

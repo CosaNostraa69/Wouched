@@ -34,6 +34,8 @@ console.log("yy");
         setUser(null);
     };
 
+    
+
     return (
         <AuthContext.Provider value={{ user, login, logout,authLoading }}>
             {children}

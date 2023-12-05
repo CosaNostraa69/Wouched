@@ -36,9 +36,9 @@ export default function JobsCard({ job, posted }) {
                 </div>
                 {
                     posted ? (
-                        <button onClick={() => router.push(`/frontend/detailPostedJob/${job.id}`)} className='my-2 py-2 px-4 border border-indigo-600 rounded flex items-center justify-center transition-all duration-700 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold'>View Applications <AiOutlineArrowRight className='mx-2 text-xl' /></button>
+                        <button onClick={() => router.push(`/User/detailPostedJob/${job.id}`)} className='my-2 py-2 px-4 border border-indigo-600 rounded flex items-center justify-center transition-all duration-700 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold'>View Applications <AiOutlineArrowRight className='mx-2 text-xl' /></button>
                     ) : (
-                        <button onClick={() => router.push(`/frontend/jobDetails/${job.id}`)} className='my-2 py-2 px-4 border border-indigo-600 rounded flex items-center justify-center transition-all duration-700 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold'>View Detail <AiOutlineArrowRight className='mx-2 text-xl' /></button>
+                        <button onClick={() => router.push(`/User/jobDetails/${job.id}`)} className='my-2 py-2 px-4 border border-indigo-600 rounded flex items-center justify-center transition-all duration-700 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold'>View Detail <AiOutlineArrowRight className='mx-2 text-xl' /></button>
                     )
                 }
             </div>

@@ -31,7 +31,7 @@ export default function ApplicationsDataTable({ application }) {
         const data = { id, status: "approved" }
         const res = await change_application_status(data);
         if (res.success) {
-            router.push('/frontend/postedJob')
+            router.push('/User/postedJob')
         } else {
             toast.error(res.message)
         }
@@ -42,7 +42,7 @@ export default function ApplicationsDataTable({ application }) {
         const data = { id, status: "rejected" }
         const res = await change_application_status(data);
         if (res.success) {
-            router.push('/frontend/postedJob')
+            router.push('/User/postedJob')
         } else {
             toast.error(res.message)
         }
@@ -85,7 +85,7 @@ export default function ApplicationsDataTable({ application }) {
             name: 'Action',
             cell: row => (
                 <div className='flex items-center justify-start w-72 h-20'>
-                    <button onClick={() => router.push(`/frontend/applicationDetail/${row?._id}`)} className=' w-20 py-2 mx-2 text-xs text-indigo-600 hover:text-white my-2 hover:bg-indigo-600 border border-indigo-600 rounded transition-all duration-700'>Details</button>
+                    <button onClick={() => router.push(`/User/applicationDetail/${row?._id}`)} className=' w-20 py-2 mx-2 text-xs text-indigo-600 hover:text-white my-2 hover:bg-indigo-600 border border-indigo-600 rounded transition-all duration-700'>Details</button>
                     <button onClick={() => handleAcceptStatus(row?._id)} className=' w-20 py-2 mx-2 text-xs text-green-600 hover:text-white my-2 hover:bg-green-600 border border-green-600 rounded transition-all duration-700'>Approved</button>
                     <button onClick={() => handleRejectStatus(row?._id)} className=' w-20 py-2 mx-2 text-xs text-red-600 hover:text-white my-2 hover:bg-red-600 border border-red-600 rounded transition-all duration-700'>Reject</button>
                 </div>

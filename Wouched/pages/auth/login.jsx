@@ -32,18 +32,8 @@ export default function Login() {
       return;
     }
 
-    const res = await login_me(formData);
-    if(res.success)
-    {
-      Cookies.set('token', res?.finalData?.token);
-      localStorage.setItem('user', JSON.stringify(res?.finalData?.user));
-      dispatch(setUserData(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null));
-      router.push('/');
-    }
-    else
-    {
-      toast.error(res.message);
-    }
+    const res = await login_me({username:formData.email,password:formData.password});
+    
   }
 
 
@@ -69,7 +59,7 @@ export default function Login() {
         <div className="w-full bg-white text-black rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-              Sign in to your account
+              Sign in to your account AAAA
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
               <div className='text-left'>

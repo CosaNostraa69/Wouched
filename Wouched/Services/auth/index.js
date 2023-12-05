@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 
 export const register_me = async (formData) => {
     try {
@@ -25,10 +24,9 @@ export const register_me = async (formData) => {
     }
   };
   
-export const login_me = async (formData) => {
-  const router = useRouter();
+  export const login_me = async (formData, router) => {
+
     try {
-      console.log(`http://localhost:8000/api/login_check`);
         const res = await fetch(`http://localhost:8000/api/login_check`, {
             method: 'POST',
             headers: {

@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
+
 #[ORM\Entity(repositoryClass: JobRepository::class)]
 #[ApiResource]
 class Job
@@ -45,8 +47,8 @@ class Job
     #[ORM\Column]
     private ?int $job_vacancy = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $job_deadline = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable:true)]
+    private ?\DateTime $job_deadline = null;
 
     #[ORM\OneToMany(mappedBy: 'job', targetEntity: ApplyJob::class)]
     private Collection $applyJobs;
@@ -176,12 +178,12 @@ class Job
         return $this;
     }
 
-    public function getJobDeadline(): ?\DateTimeInterface
+    public function getJobDeadline(): ?\DateTime
     {
         return $this->job_deadline;
     }
 
-    public function setJobDeadline(\DateTimeInterface $job_deadline): static
+    public function setJobDeadline(\DateTime $job_deadline): static
     {
         $this->job_deadline = $job_deadline;
 

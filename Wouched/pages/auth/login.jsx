@@ -32,7 +32,7 @@ export default function Login() {
       return;
     }
 
-    const res = await login_me({username:formData.email,password:formData.password});
+    const res = await login_me({username:formData.email,password:formData.password}, router);
     
   }
 

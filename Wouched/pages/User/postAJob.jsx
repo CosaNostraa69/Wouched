@@ -9,13 +9,14 @@ import { useAuth } from '@/Services/authContext';
 
 export default function PostAJob() {
     const { user } = useAuth();
-    console.log("user");
     const router = useRouter();
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
       setIsClient(true);
     }, []);
+
+
 
     const [formData, setFormData] = useState({
         user: user?._id,
@@ -24,11 +25,11 @@ export default function PostAJob() {
         email: "", 
         company: "", 
         description: "", 
-        job_category: "", 
-        job_type: "", 
-        job_experience: "", 
-        job_vacancy: 0, 
-        job_deadline: ""
+        jobCategory: "", 
+        jobType: "", 
+        jobExperience: "", 
+        jobVacancy: 0, 
+        // jobDeadline: ""
     });
 
     const [error, setError] = useState({
@@ -38,11 +39,11 @@ export default function PostAJob() {
         email: "", 
         company: "", 
         description: "", 
-        job_category: "", 
-        job_type: "", 
-        job_experience: "", 
-        job_vacancy: "", 
-        job_deadline: ""
+        jobCategory: "", 
+        jobType: "", 
+        jobExperience: "", 
+        jobVacancy: "", 
+        // jobDeadline: ""
     });
 
     const handleSubmit = async (e) => {
@@ -89,12 +90,13 @@ export default function PostAJob() {
             setError({ ...error, job_vacancy: "job_vacancy Field is required" })
             return;
         }
-        if (!formData.job_deadline) {
-            setError({ ...error, job_deadline: "job_deadline Field is required" })
-            return;
-        }
+        // if (!formData.job_deadline) {
+        //     setError({ ...error, job_deadline: "job_deadline Field is required" })
+        //     return;
+        // }
 
-        if (formData.user == null) {
+        console.log(user);
+        if (user == null) {
             return toast.error("Please Login First");
         }
 
@@ -103,12 +105,13 @@ export default function PostAJob() {
             toast.error("Please Login First");
             return;
         }
-
+        
+        formData.user="/api/users/" + user.id
         const response = await post_job({ ...formData, token });
         if (response.data && response.error == null) {
             toast.success("Job Posted Successfully !");
             setTimeout(() => {
-                router.push('/frontend/displayJobs');
+                router.push('/User/displayJobs');
             }, 1000);
         } else {
             toast.error(response.error || "An error occurred while posting the job.");
@@ -193,13 +196,13 @@ export default function PostAJob() {
                             error.job_vacancy && <p className="text-sm text-red-500">{error.job_vacancy}</p>
                         }
                     </div>
-                    <div className='w-full mb-4  flex flex-col items-start justify-center'>
+                    {/* <div className='w-full mb-4  flex flex-col items-start justify-center'>
                         <label htmlFor="jobva" className='mb-1 text-base font-semibold'>Job Deadline :</label>
-                        <input onChange={(e) => setFormData({ ...formData, job_deadline: e.target.value })} type="date" id='jobva' className='w-full py-2 px-3 mb-2 border border-orange-600 rounded' placeholder='Enter Deadline of job' />
+                        <input onChange={(e) => setFormData({ ...formData, job_deadline: e.target.value })} type="datetime-local" id='jobva' className='w-full py-2 px-3 mb-2 border border-orange-600 rounded' placeholder='Enter Deadline of job' />
                         {
                             error.job_deadline && <p className="text-sm text-red-500">{error.job_deadline}</p>
                         }
-                    </div>
+                    </div> */}
                    <button type="submit" className='w-full py-2 rounded bg-orange-600 text-white font-semibold tracking-widest'>Submit</button>
                 </form>
             </div>

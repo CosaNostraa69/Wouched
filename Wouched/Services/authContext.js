@@ -8,16 +8,13 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
-console.log("yy");
     useEffect(() => {
-        console.log("effect");
         const token = localStorage.getItem('token');
         if (token) {
-            console.log("prout");
             const decoded = jwtDecode(token);
             if (decoded) {
-                console.log(decoded);
-                setUser(decoded);
+                console.log(decoded.user);
+                setUser(decoded.user);
                 setAuthLoading(false);
             }
         }

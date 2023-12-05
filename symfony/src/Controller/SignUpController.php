@@ -47,6 +47,8 @@ class SignUpController extends AbstractController
         $newUser->setPassword($this->passwordHasher->hashPassword($newUser, $userPassword));
         $this->entityManager->persist($newUser);
         $this->entityManager->flush();
+        $userId = $newUser->getId();
+
 
         $token = $JWTManager->create($newUser);
 

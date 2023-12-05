@@ -73,21 +73,34 @@ export const get_specified_job = async (id) => {
 
 export const apply_job = async (formData) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/job/applications`, {
+        const token = Cookies.get('token');
+        if (!token) {
+            throw new Error("No authentication token found");
+        }
+
+        const res = await fetch(`http://127.0.0.1:8000/api/job/applications`, {
             method: 'POST',
-            headers : {'Authorization': `Bearer ${Cookies.get('token')}`},
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
             body: JSON.stringify(formData),
         });
+
         if (!res.ok) {
-            throw new Error(`Network response was not ok: ${res.status}`);
+            const errorData = await res.json();
+            throw new Error(errorData.message || `Network response was not ok: ${res.status}`);
         }
+
         const data = await res.json();
+        console.log('Job application successful:', data);
         return { data, error: null };
     } catch (error) {
-        console.log('error in applying for a job (service) => ', error);
+        console.error('error in applying for a job (service) => ', error);
         return { data: null, error };
     }
 }
+
 
 
 
@@ -95,20 +108,36 @@ export const apply_job = async (formData) => {
  
 export const get_my_applied_job = async (id) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/${id}/applied_jobs`, {
-            method: 'GET',
-            headers : {'Authorization': `Bearer ${Cookies.get('token')}`}
-        });
-        if (!res.ok) {
-            throw new Error(`Network response was not ok: ${res.status}`);
+        if (!id) {
+            throw new Error("Missing user ID for fetching applied jobs");
         }
+
+        const token = Cookies.get('token');
+        if (!token) {
+            throw new Error("No authentication token found");
+        }
+
+        const res = await fetch(`http://127.0.0.1:8000/api/users/${id}/applied_jobs`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || `Network response was not ok: ${res.status}`);
+        }
+
         const data = await res.json();
+        console.log('Successfully fetched applied jobs:', data);
         return { data, error: null };
     } catch (error) {
-        console.log('error in getting my all applied jobs (service) => ', error);
+        console.error('error in getting my all applied jobs (service) => ', error);
         return { data: null, error };
     }
 }
+
 
 
 
@@ -116,7 +145,7 @@ export const get_my_applied_job = async (id) => {
 
 export const get_my_posted_job = async (id) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/${id}/posted_jobs`, {
+        const res = await fetch(`http://127.0.0.1:8000/api/users/${id}/posted_jobs`, {
             method: 'GET',
             headers : {'Authorization': `Bearer ${Cookies.get('token')}`}
         });
@@ -137,7 +166,7 @@ export const get_my_posted_job = async (id) => {
 
 export const get_all_applications = async (id) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/jobs/${id}/applications`, {
+        const res = await fetch(`http://127.0.0.1:8000/api/jobs/${id}/applications`, {
             method: 'GET',
             headers : {'Authorization': `Bearer ${Cookies.get('token')}`}
         });
@@ -158,7 +187,7 @@ export const get_all_applications = async (id) => {
 
 export const change_application_status = async (formData) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/job/applications/${formData.id}/status`, {
+        const res = await fetch(`http://127.0.0.1:8000/api/job/applications/${formData.id}/status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -181,7 +210,7 @@ export const change_application_status = async (formData) => {
 
 export const get_application_details = async (id) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/job/applications/${id}`, {
+        const res = await fetch(`http://127.0.0.1:8000/api/job/applications/${id}`, {
             method: 'GET',
             headers : {'Authorization': `Bearer ${Cookies.get('token')}`}
         });

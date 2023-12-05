@@ -46,6 +46,8 @@ export default function Dashboard() {
 
 
   const fetchAppliedJobs = async () => {
+    console.log("User ID:", id);
+
 
     const res = await get_my_applied_job(id)
     const get_bookmarks =   await get_book_mark_job(id)

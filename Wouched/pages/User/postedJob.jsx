@@ -4,39 +4,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import NavBar from '@/components/NavBar';
 import JobsCard from '@/components/JobsCard';
-import { InfinitySpin } from 'react-loader-spinner';
 import { setMyJobs } from '@/Utils/JobSlice';
 import { get_my_posted_job } from '@/Services/job';
 import { useAuth } from '@/Services/authContext';
 
 export default function PostedJobs() {
-    const { user,authLoading, token  } = useAuth();
+    const { user, authLoading, token } = useAuth();
     const router = useRouter();
     const myJobs = useSelector(state => state?.Job?.myJobs);
     const dispatch = useDispatch();
 
-
-
     useEffect(() => {
-        if (!user && !authLoading ) {
-            console.log("hello");
+        if (!user && !authLoading) {
             router.push('/auth/login');
         }
-    }, [user]);
-
+    }, [user, authLoading, router]);
 
     useEffect(() => {
-        if (user) {
-            get_my_posted_job(user?.id, token)
+        if (user && token) {
+            get_my_posted_job(user.id, token)
                 .then(res => {
-                    dispatch(setMyJobs(res?.data));
+                    // Assurez-vous d'extraire correctement les jobs de la réponse
+                    const jobs = res.data['hydra:member'];
+                    dispatch(setMyJobs(jobs));
                 })
                 .catch(err => {
-                    toast.error(err?.response?.data?.message);
+                    toast.error(err.message || 'Error fetching jobs');
                 });
         }
-    } 
-    , [user]);
+    }, [user, token, dispatch]);
 
     return (
         <>

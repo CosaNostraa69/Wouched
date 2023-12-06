@@ -27,7 +27,6 @@ export default function Dashboard() {
   useEffect(() => {
     
     if (!authLoading){
-      console.log("authLoading finish");
       if (!user) {
         router.push('/auth/login')
       }
@@ -46,7 +45,6 @@ export default function Dashboard() {
 
 
   const fetchAppliedJobs = async () => {
-    console.log("User ID:", id);
 
 
     const res = await get_my_applied_job(id)

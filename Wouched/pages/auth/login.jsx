@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { login_me } from '@/Services/auth';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
@@ -59,7 +59,7 @@ export default function Login() {
         <div className="w-full bg-white text-black rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
-              Sign in to your account AAAA
+              Sign in to your account
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
               <div className='text-left'>

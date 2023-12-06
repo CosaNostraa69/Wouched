@@ -8,6 +8,8 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [authLoading, setAuthLoading] = useState(true);
+    const [token, setToken] = useState();
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -15,6 +17,7 @@ export const AuthProvider = ({ children }) => {
             if (decoded) {
                 console.log(decoded.user);
                 setUser(decoded.user);
+                setToken(token)
                 setAuthLoading(false);
             }
         }
@@ -34,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     
 
     return (
-        <AuthContext.Provider value={{ user, login, logout,authLoading }}>
+        <AuthContext.Provider value={{ user, login, logout,authLoading, token }}>
             {children}
         </AuthContext.Provider>
     );

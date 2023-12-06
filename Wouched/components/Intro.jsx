@@ -10,7 +10,7 @@ export default function Intro() {
   const jobData = useSelector((state) => state.Job.JobData);
   const [filterJobs, setFilteredJobs] = useState([]);
   const [doneSearch, setDoneSearch] = useState(false);
-  console.log(jobData, filterJobs, doneSearch);
+  
 
   const handleSearch = (e) => {
     e.preventDefault();

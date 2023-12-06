@@ -31,8 +31,9 @@ export default function JobDetails() {
     const [JobDetails, setJobDetails] = useState(null);
 
 
-    const { data, error , isLoading } = useSWR(`/get-specified-job`, () => get_specified_job(id));
-
+    const { data, error } = useSWR(`${id}`, get_specified_job)
+    const isLoading = !data && !error;
+    
 
     useEffect(() => {
         if(data) setJobDetails(data?.data)
@@ -43,12 +44,14 @@ export default function JobDetails() {
 
 
     useEffect(() => {
-        if (JobDetails) {
-            const filteredJobData = JobData?.filter((job) => job.job_category === JobDetails?.job_category)
-            const filteredJobData2 = filteredJobData?.filter((job) => job._id !== JobDetails?._id)
-            dispatch(setMatchingJobDat(filteredJobData2))
+        if (JobData) {
+            const matching = JobData?.filter((item) => item?.job_category === JobDetails?.job_category)
+            dispatch(setMatchingJobDat(matching))
         }
-    }, [JobDetails, JobData, dispatch])
+    }
+        , [JobDetails])
+
+
 
 
     const handleApply = () => {
@@ -93,7 +96,7 @@ export default function JobDetails() {
                                     <div className='flex mb-1 items-center justify-center'>
                                         <Image src={"https://xsgames.co/randomusers/avatar.php?g=male"} alt="no-image" className='rounded-full mb-2' width={100} height={100} />
                                         <div className='px-4 mx-2 flex flex-col items-start justify-center'>
-                                            <p className='font-semibold text-base mb-1' >{JobDetails?.title} </p>
+                                            <p className='font-semibold text-base mb-1' >{JobDetails?.title}</p>
                                             <p className=' text-sm text-gray-800 mb-1'>{JobDetails?.company}</p>
                                         </div>
 

@@ -39,7 +39,6 @@ export const register_me = async (formData) => {
    
       console.log(data);
       localStorage.setItem('token', data.token);
-      // dispatch(setUserData(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null));
       router.push('/');
 
     

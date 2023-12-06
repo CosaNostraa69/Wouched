@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import useSWR from 'swr';
 import NavBar from '@/components/NavBar';
 import JobsCard from '@/components/JobsCard';
 import { InfinitySpin } from 'react-loader-spinner';
@@ -11,34 +10,33 @@ import { get_my_posted_job } from '@/Services/job';
 import { useAuth } from '@/Services/authContext';
 
 export default function PostedJobs() {
-    const { user } = useAuth();
+    const { user,authLoading, token  } = useAuth();
     const router = useRouter();
-    const dispatch = useDispatch();
     const myJobs = useSelector(state => state?.Job?.myJobs);
+    const dispatch = useDispatch();
+
+
 
     useEffect(() => {
-        if (!user || !user._id) {
+        if (!user && !authLoading ) {
+            console.log("hello");
             router.push('/auth/login');
         }
-    }, [user, router]);
+    }, [user]);
 
-    const fetcher = url => get_my_posted_job(user._id).then(res => res.data);
-    const { data, error, isValidating } = useSWR(user && user._id ? '/getMyPostedJobs' : null, fetcher);
 
     useEffect(() => {
-        if (data && Array.isArray(data)) {
-            dispatch(setMyJobs(data));
+        if (user) {
+            get_my_posted_job(user?.id, token)
+                .then(res => {
+                    dispatch(setMyJobs(res?.data));
+                })
+                .catch(err => {
+                    toast.error(err?.response?.data?.message);
+                });
         }
-    }, [data, dispatch]);
-
-    if (error) {
-        toast.error("Error loading jobs.");
-        return null;
-    }
-
-    if (isValidating || !data) {
-        return <InfinitySpin width='200' color="#FF6600" />;
-    }
+    } 
+    , [user]);
 
     return (
         <>

@@ -8,20 +8,36 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { setUserData } from '@/Utils/UserSlice';
 import { AiFillCaretDown, AiFillCaretUp } from 'react-icons/ai';
 import Image from 'next/image';
+import { useAuth } from '@/Services/authContext';
 
 
 export default function NavBar() {
+    const router = useRouter();
     const dispatch = useDispatch();
-    const [openJobs, setOpenJobs] = useState(false);
-    const Router = useRouter();
-    const user = useSelector(state => state.User.userData);
-    const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
+    const { user, authLoading } = useAuth();
     const ref = useRef();
 
+    const [openJobs, setOpenJobs] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+    const [lastToken, setLastToken] = useState(null);
+
     useEffect(() => {
-        dispatch(setUserData(localStorage.getItem('token') ? localStorage.getItem('token') : null));
-    }, [dispatch]);
+        setLastToken(localStorage.getItem('token'));
+    }, []);
+
+    useEffect(() => {
+        const checkTokenChange = () => {
+            const currentToken = localStorage.getItem('token');
+            if (currentToken !== lastToken) {
+                setLastToken(currentToken);
+                dispatch(setUserData(currentToken));
+            }
+        };
+
+        const intervalId = setInterval(checkTokenChange, 1000);
+        return () => clearInterval(intervalId);
+    }, [lastToken, dispatch]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -35,8 +51,9 @@ export default function NavBar() {
     const handleLogout = () => {
         Cookies.remove('token');
         localStorage.removeItem('token');
+        setLastToken(null);
+        router.reload();
         dispatch(setUserData(null));
-        Router.push('/');
     }
 
     const handleClickOutside = (event) => {

@@ -22,17 +22,15 @@ export const config = {
 };
 
 
-export default async (req, res) => {
-    await ConnectDB();
+export default async function handler(req, res) {
     const { method } = req;
     switch (method) {
         case 'POST':
-            await validateToken(req, res, async () => {
-                await applyToJob(req, res);
-            });
+            await validateToken(req, res, applyToJob);
             break;
         default:
-            res.status(400).json({ success: false, message: 'Invalid Request' });
+            res.setHeader('Allow', ['POST']);
+            res.status(405).end(`Method ${method} Not Allowed`);
     }
 }
 
@@ -63,7 +61,6 @@ const applyToJob =  async (req, res) => {
             const newPath = path.join(process.cwd(), 'public', 'uploads', fileName);
 
 
-            // Read the file
             fs.readFile(oldPath, function (err, data) {
                 if (err) throw err;
                 fs.writeFile(newPath, data, function (err) {

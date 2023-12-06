@@ -64,6 +64,7 @@ export const get_specified_job = async (id) => {
         console.log('error in getting specified job (service) => ', error);
         return { data: null, error };
     }
+
 }
 
 
@@ -143,19 +144,24 @@ export const get_my_applied_job = async (id) => {
 
 // get my all posted job api 
 
-export const get_my_posted_job = async (id) => {
+export const get_my_posted_job = async (id,token) => {
     try {
-        const res = await fetch(`http://127.0.0.1:8000/api/users/${id}/posted_jobs`, {
+       
+
+        const res = await fetch(`http://127.0.0.1:8000/api/jobs?user=/api/users/${id}`, {
             method: 'GET',
-            headers : {'Authorization': `Bearer ${Cookies.get('token')}`}
+            headers: { 'Authorization': `Bearer ${token}` }
         });
+
         if (!res.ok) {
             throw new Error(`Network response was not ok: ${res.status}`);
         }
+        
         const data = await res.json();
         return { data, error: null };
-    } catch (error) {
-        console.log('error in getting my all posted jobs (service) => ', error);
+    }
+    catch (error) {
+        console.error('error in getting my all posted jobs (service) => ', error);
         return { data: null, error };
     }
 }

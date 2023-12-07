@@ -24,7 +24,6 @@ export default function PostedJobs() {
         if (user && token) {
             get_my_posted_job(user.id, token)
                 .then(res => {
-                    // Assurez-vous d'extraire correctement les jobs de la réponse
                     const jobs = res.data['hydra:member'];
                     dispatch(setMyJobs(jobs));
                 })

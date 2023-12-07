@@ -15,7 +15,6 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             const decoded = jwtDecode(token);
             if (decoded) {
-                console.log(decoded.user);
                 setUser(decoded.user);
                 setToken(token)
                 setAuthLoading(false);

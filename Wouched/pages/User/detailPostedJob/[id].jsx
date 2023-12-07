@@ -1,37 +1,35 @@
+import { useAuth } from '@/Services/authContext';
 import { get_all_applications } from '@/Services/job';
 import ApplicationsDataTable from '@/components/ApplicationsDataTable'
 import NavBar from '@/components/NavBar'
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { InfinitySpin } from 'react-loader-spinner';
-import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import useSWR from 'swr'
 
 export default function PostedJobsDetails() {
+    const { user, authLoading, token, isLoading } = useAuth();
     const router = useRouter();
-    const [loading, setLoading] = useState(true);
-    const { id } = router.query;
-    const user = useSelector(state => state?.User?.userData)
-    const userId = user?._id
-
     const [application, setApplication] = useState([]);
-
+    const { id } = router.query;
 
     useEffect(() => {
-        if (!userId || !Cookies.get('token')) {
-            router.push('/auth/login')
+        if (!user && !authLoading) {
+            router.push('/auth/login');
         }
-    }, [user, userId, Cookies])
+    }, [user, authLoading, router]);
 
-    const { data, error , isLoading } = useSWR(`/get-all-Application`, () => get_all_applications(id));
-    
-     useEffect(() => {
-        if(data) setApplication(data?.data)
-    }, [data])
-
-    if(error) toast.error(error)
+    useEffect(() => {
+        if (user && token && id) {
+            get_all_applications(id, token)
+                .then(res => {
+                    setApplication(res.data); 
+                })
+                .catch(err => {
+                    toast.error(err.message || 'Error fetching applications');
+                });
+        }
+    }, [user, token, id]);
 
     return (
         <>

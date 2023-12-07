@@ -29,14 +29,16 @@ export default function JobDetails() {
     const machingData = useSelector(state => state?.Job?.matchingData)
     const user = useSelector(state => state?.User?.userData)
     const [JobDetails, setJobDetails] = useState(null);
+    const { data, error } = useSWR(`${id}`, get_specified_job);
+    // const isLoading = !data && !error;
+        const [isLoaded,setIsLoaded] = useState(false)
 
 
-    const { data, error } = useSWR(`${id}`, get_specified_job)
-    const isLoading = !data && !error;
     
 
     useEffect(() => {
-        if(data) setJobDetails(data?.data)
+        if(data) {setJobDetails(data?.data)
+            setIsLoaded(true)}
     }, [data])
 
 
@@ -47,6 +49,7 @@ export default function JobDetails() {
         if (JobData) {
             const matching = JobData?.filter((item) => item?.job_category === JobDetails?.job_category)
             dispatch(setMatchingJobDat(matching))
+            setIsLoaded(true)
         }
     }
         , [JobDetails])
@@ -56,7 +59,7 @@ export default function JobDetails() {
 
     const handleApply = () => {
         if (!user) return toast.error('Please Login First');
-        router.push(`/frontend/applyJob/${id}`)
+        router.push(`/User/applyJob/${id}`)
     }
 
 
@@ -67,6 +70,7 @@ export default function JobDetails() {
         const data = {user : user?._id , job : JobDetails?._id}
         const res = await book_mark_job(data);
         if(res.success) {
+            setIsLoaded(true)
            return toast.success(res.message)
         }
         else {
@@ -78,7 +82,7 @@ export default function JobDetails() {
     return (
         <>
             {
-                isLoading ? (
+                !isLoaded ? (
                     <div className='bg-gray w-full h-screen flex items-center flex-col justify-center'>
                         <InfinitySpin width='200' color="#FF6600" />
                         <p className='text-xs uppercase'>Loading Resources Hold Tight...</p>
@@ -139,8 +143,8 @@ export default function JobDetails() {
                                     </div>
                                     <div className='flex items-center justify-center'>
                                         {
-                                            JobDetails?.user?.email === user?.email ? (
-                                                <p className='text-xs text-red-500'>unable Apply to your Own jobs</p>
+                                            JobDetails?.email === user?.email ? (
+                                                <p className='text-xs text-red-500'>unable Apply to your Own jobs {user.email}</p>
                                             ) : (
                                                 <div className='flex items-center justify-center  '>
                                                     <BsFillBookmarkCheckFill onClick={handleBookMark} className='text-indigo-600 text-4xl cursor-pointer  mx-2'/>
@@ -181,7 +185,7 @@ export default function JobDetails() {
                                     {/* card */}
 
                                     {
-                                        machingData?.length === 0 ? (
+                                        !machingData ? (
                                             <>
                                                 <div className='md:w-96 w-full py-3 mx-4 my-2 flex items-center md:items-start px-6 justify-start md:justify-center flex-col rounded bg-gray-50'>
                                                     <p  className='text-xs font-semibold text-red-600 uppercase'>No Other similar Jobs Available ...</p>

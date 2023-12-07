@@ -53,7 +53,7 @@ export const get_specified_job = async (id) => {
     try {
         const res = await fetch(`http://127.0.0.1:8000/api/jobs/${id}`, {
             method: 'GET',
-            headers : {'Authorization': `Bearer ${Cookies.get('token')}`}
+            headers : {'Authorization': `Bearer ${localStorage.getItem('token')}`}
         });
         if (!res.ok) {
             throw new Error(`Network response was not ok: ${res.status}`);
@@ -172,9 +172,9 @@ export const get_my_posted_job = async (id,token) => {
 
 export const get_all_applications = async (id) => {
     try {
-        const res = await fetch(`http://127.0.0.1:8000/api/jobs/${id}/applications`, {
+        const res = await fetch(`http://localhost:8000/api/apply_jobs?page=1&job=${id}`, {
             method: 'GET',
-            headers : {'Authorization': `Bearer ${Cookies.get('token')}`}
+            headers : {'Authorization': `Bearer ${localStorage.getItem('token')}`}
         });
         if (!res.ok) {
             throw new Error(`Network response was not ok: ${res.status}`);

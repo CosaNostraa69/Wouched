@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 export default function ApplicationsDataTable({ application }) {
 
     const router = useRouter();
+    const [loaded, setLoaded] = useState(false);
 
 
     const [Data, setData] = useState([]);
@@ -63,11 +64,11 @@ export default function ApplicationsDataTable({ application }) {
     const columns = [
         {
             name: 'Name',
-            selector: row => row?.user?.name,
+            selector: row => row?.name,
         },
         {
             name: 'Email',
-            selector: row => row?.user?.email,
+            selector: row => row?.email,
         },
         {
             name: 'Status',
@@ -99,23 +100,26 @@ export default function ApplicationsDataTable({ application }) {
 
     useEffect(() => {
         if (search === '') {
-            setFilteredData(Data);
+            setFilteredData(Data["hydra:member"]);
+            setLoaded(true);
         } else {
-            setFilteredData(Data?.filter((item) => {
-                const itemData = item?.user?.name.toUpperCase();
+            setFilteredData(Data["hydra:member"].filter((item) => {
+                const itemData = item?.name.toUpperCase();
                 const textData = search.toUpperCase();
                 return itemData.indexOf(textData) > -1;
             }))
+            setLoaded(true);
         }
-
-
+        
+        console.log("fd", filteredData);
     }, [search, Data])
 
 
     return (
         <>
+{ Data && loaded ? (
 
-            <DataTable
+    <DataTable
                 subHeaderAlign={"right"}
                 columns={columns}
                 data={filteredData}
@@ -135,8 +139,9 @@ export default function ApplicationsDataTable({ application }) {
                         placeholder={"Search with Applicant  name..."} />
                 }
                 className="h-screen bg-white"
-            />
+            />):(<p className='my-4 '>No Applications ...</p>)
 
+}
 
         </>
     )

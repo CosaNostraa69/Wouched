@@ -1,27 +1,39 @@
 import NavBar from '@/components/NavBar';
+import { useAuth } from '@/Services/authContext';
 import { apply_job } from '@/Services/job';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function ApplyJob() {
-    const router = useRouter()
-    const dispatch = useDispatch();
-    const { id } = router.query
-    const activeUser = useSelector(state => state.User.userData)
-    const [formikData, setFormikData] = useState({ name: '', email: activeUser?.email , about: '', job: id, user: activeUser?._id })
+    const router = useRouter();
+    const { id } = router.query;
+    const activeUser = useSelector(state => state.User.userData);
+    const { user, authLoading, token } = useAuth();
     const [file, setFile] = useState(null)
-    const [error, setError] = useState({ name: '', email: "", about: '', job: '', user: '', cv: '' });
+    const [error, setError] = useState({ name: '', email: '', about: '', job: '', user: '', cv: '' });
+    const [formikData, setFormikData] = useState({ 
+        name: '', 
+        email: '', 
+        about: '', 
+        status:"",
+        cv:"",
+        job:  `/api/jobs/11`, 
+        user: `/api/users/11` 
+    });
+    const { name, email, about, job } = formikData;
 
-
-    const { name, email, about, job, user } = formikData;
+    
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
+    
+        console.log("Job ID:", job, "User Id:", user, "token", token, "Name", name);
+        console.log("Sending data:", formikData);
 
+        
 
 
         if (!name) {
@@ -59,8 +71,6 @@ export default function ApplyJob() {
         }
 
 
-
-
         const form = new FormData();
         form.append('name', name);
         form.append('email', email);
@@ -70,21 +80,30 @@ export default function ApplyJob() {
         form.append('cv', file);
 
 
-        const res = await apply_job(form);
-        if (res.success) {
-            toast.success('Your Application is Submitted , Redirecting ... ')
-            setTimeout(() => {
-                router.push('/')
-            }, 1000);
 
-        } else {
-            toast.error('Something Went Wrong')
+        try {
+
+
+
+            console.log(form)
+            const res = await apply_job(formikData);
+            toast.success(res.data.about);
+            router.push('/User/dashboard')
         }
-
-
+        catch (err) {
+            toast.error(err.about || 'Error applying job');
+        }
 
     }
 
+
+
+    // useEffect(() => {
+    //     if (id ) {
+    //         setFormikData(fData => ({ ...fData, job: id, user:id }));
+    //     }
+    // }, [id]);
+    
     
 
     return (
@@ -102,7 +121,7 @@ export default function ApplyJob() {
                     </div>
                     <div className='w-full mb-4  flex flex-col items-start justify-center'>
                         <label htmlFor="email" className='mb-1 text-base font-semibold'>Email :</label>
-                        <input name='email' value={email} disabled type="email" id='email' className='w-full  py-2 px-3 mb-2 border border-indigo-600 rounded' placeholder='Enter Email' />
+                        <input name='email' onChange={(e) => setFormikData({ ...formikData, email: e.target.value })} type="email" id='email' className='w-full py-2 px-3 mb-2 border border-indigo-600 rounded' placeholder='Enter Email' />
                         {
                             error.email && <p className="text-sm text-red-500">{error.email}</p>
                         }

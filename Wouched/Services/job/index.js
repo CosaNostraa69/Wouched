@@ -72,27 +72,27 @@ export const get_specified_job = async (id) => {
 
 // apply  job api
 
-export const apply_job = async (formData) => {
+export const apply_job = async (formData ) => {
     try {
-        const token = Cookies.get('token');
+        const token = localStorage.getItem('token');
         if (!token) {
             throw new Error("No authentication token found");
         }
 
-        const res = await fetch(`http://127.0.0.1:8000/api/job/applications`, {
+        const res = await fetch(`http://127.0.0.1:8000/api/apply_jobs`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/ld+json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(formData), 
         });
 
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || `Network response was not ok: ${res.status}`);
         }
-
+        
         const data = await res.json();
         console.log('Job application successful:', data);
         return { data, error: null };
@@ -107,11 +107,11 @@ export const apply_job = async (formData) => {
 
 // get my all applied job api
  
-export const get_my_applied_job = async (id) => {
+export const get_my_applied_job = async (id, token) => {
+    if (!id, token) {
+        throw new Error("Missing user ID for fetching applied jobs");
+    }
     try {
-        if (!id) {
-            throw new Error("Missing user ID for fetching applied jobs");
-        }
 
         const token = Cookies.get('token');
         if (!token) {

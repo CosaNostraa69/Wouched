@@ -57,8 +57,8 @@ export default function JobDetails() {
 
 
 
-    const handleApply = () => {
-        if (!user) return toast.error('Please Login First');
+    const handleApply = (user, token, _id) => {
+        if (!user && token) return toast.error('Please Login First');
         router.push(`/User/applyJob/${id}`)
     }
 
@@ -144,7 +144,7 @@ export default function JobDetails() {
                                     <div className='flex items-center justify-center'>
                                         {
                                             JobDetails?.email === user?.email ? (
-                                                <p className='text-xs text-red-500'>unable Apply to your Own jobs {user.email}</p>
+                                                <p className='text-xs text-red-500'>unable Apply to your Own jobs {user?.email}</p>
                                             ) : (
                                                 <div className='flex items-center justify-center  '>
                                                     <BsFillBookmarkCheckFill onClick={handleBookMark} className='text-indigo-600 text-4xl cursor-pointer  mx-2'/>

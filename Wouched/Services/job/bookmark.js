@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 export const book_mark_job = async (formData) => {
 
     try {
-        const res = await fetch(`http://127.0.0.1:8000/api/job/bookmark`, {
+        const res = await fetch(`http://127.0.0.1:8000/api/bookmarks`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

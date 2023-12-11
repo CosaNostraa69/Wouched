@@ -10,6 +10,7 @@ import useSWR from 'swr'
 import { get_job } from '@/Services/job'
 import { setJobData } from '@/Utils/JobSlice'
 import { InfinitySpin } from 'react-loader-spinner'
+import Footer from '@/components/Footer'
 
 
 
@@ -56,6 +57,9 @@ export default function Home() {
               <Intro />
             </div>
           </>
+
+            <Footer />
+
         
       
     </>

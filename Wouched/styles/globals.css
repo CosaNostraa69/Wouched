@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.custom-button:hover {
+    color: white;
+    background-color: currentColor;
+}
+
+/* Responsive styles */
+@media (max-width: 630px) {
+    .custom-button {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+}

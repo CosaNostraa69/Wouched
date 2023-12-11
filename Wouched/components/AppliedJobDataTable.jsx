@@ -1,8 +1,8 @@
-import { data } from 'autoprefixer';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
 import { useSelector } from 'react-redux';
+
 
 export default function AppliedJobDataTable() {
     const router = useRouter();
@@ -51,6 +51,8 @@ export default function AppliedJobDataTable() {
             cell: row => <button onClick={() => router.push(`/User/jobDetails/${row?.job?._id}`)} className='md:px-2 md:py-2 px-1 py-1 text-xs text-indigo-600 hover:text-white my-2 hover:bg-indigo-600 border border-indigo-600   rounded transition-all duration-700  '>view Detail</button>
         },
     ];
+
+    
 
 
 

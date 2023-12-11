@@ -31,7 +31,7 @@ export default function JobDetails() {
     const [JobDetails, setJobDetails] = useState(null);
     const { data, error } = useSWR(`${id}`, get_specified_job);
     // const isLoading = !data && !error;
-        const [isLoaded,setIsLoaded] = useState(false)
+    const [isLoaded,setIsLoaded] = useState(false)
 
 
     
@@ -63,20 +63,16 @@ export default function JobDetails() {
     }
 
 
-    const handleBookMark = async () =>  {
-
-        if (!user) return toast.error('Please Login First');
-
-        const data = {user : user?._id , job : JobDetails?._id}
-        const res = await book_mark_job(data);
-        if(res.success) {
-            setIsLoaded(true)
-           return toast.success(res.message)
+    const handleBookMark = async (user, token, _id) => {
+        console.log("token", token);
+        if (!user && token) return toast.error('Please Login First');
+        const res = await book_mark_job(user?.id, id, user?.token)
+        if (res.success) {
+            toast.success('Job Bookmarked Successfully')
         }
         else {
-            return toast.error(res.message)
+            toast.error('Error Occured')
         }
-
     }
 
     return (

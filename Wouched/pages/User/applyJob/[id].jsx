@@ -13,13 +13,12 @@ export default function ApplyJob() {
     const activeUser = useSelector(state => state.User.userData);
     const { user, authLoading, token } = useAuth();
     const [file, setFile] = useState(null)
-    const [error, setError] = useState({ name: '', email: '', about: '', job: '', user: '', cv: '' });
+    const [error, setError] = useState({ name: '', email: '', about: '', job: '', user: ''});
     const [formikData, setFormikData] = useState({ 
         name: '', 
         email: '', 
         about: '', 
         status:"",
-        cv:"",
         job:  `/api/jobs/11`, 
         user: `/api/users/11` 
     });
@@ -59,16 +58,6 @@ export default function ApplyJob() {
             return;
         }
 
-        if (!file) {
-            setError({ ...error, cv: "Please Upload CV" })
-            return;
-        }
-
-        // Check if the file type is PDF
-        if (file.type !== 'application/pdf') {
-            setError({ ...error, cv: "Please Upload a PDF file" })
-            return;
-        }
 
 
         const form = new FormData();
@@ -77,7 +66,6 @@ export default function ApplyJob() {
         form.append('about', about);
         form.append('job', job);
         form.append('user', user);
-        form.append('cv', file);
 
 
 
@@ -88,7 +76,7 @@ export default function ApplyJob() {
             console.log(form)
             const res = await apply_job(formikData);
             toast.success(res.data.about);
-            router.push('/User/dashboard')
+            router.push('/')
         }
         catch (err) {
             toast.error(err.about || 'Error applying job');
@@ -133,14 +121,7 @@ export default function ApplyJob() {
                             error.about && <p className="text-sm text-red-500">{error.about}</p>
                         }
                     </div>
-                    <div className='w-full mb-4  flex flex-col items-start justify-center'>
-                        <label htmlFor="file" className='mb-1 text-base font-semibold'>Upload CV :</label>
-                        <input accept="application/pdf" name='cv' onChange={(e) => setFile(e.target.files[0])} type="file" id='file' className='w-full py-2 px-3 mb-2 border border-indigo-600 rounded' placeholder='Enter Email' />
-                        {
-                            error.cv && <p className="text-sm text-red-500">{error.cv}</p>
-                        }
-                    </div>
-
+                 
                     <button type="submit" className='w-full py-2 rounded bg-indigo-600 text-white font-semibold tracking-widest'>Submit</button>
                 </form>
             </div>

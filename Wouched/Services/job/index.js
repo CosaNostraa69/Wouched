@@ -193,11 +193,13 @@ export const get_all_applications = async (id) => {
 
 export const change_application_status = async (formData) => {
     try {
-        const res = await fetch(`http://127.0.0.1:8000/api/job/applications/${formData.id}/status`, {
-            method: 'PUT',
+        console.log("Data:");
+        console.log(formData);
+        const res = await fetch(`http://127.0.0.1:8000/api/apply_jobs/${formData.id}`, {
+            method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${Cookies.get('token')}`
+                'Content-Type': 'application/merge-patch+json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify(formData),
         });

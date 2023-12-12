@@ -60,6 +60,7 @@ export default function ApplicationsDetail() {
               </div>
             </div>
           </div>
+          
         </>
       )}
     </>

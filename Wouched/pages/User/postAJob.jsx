@@ -29,7 +29,6 @@ export default function PostAJob() {
         jobType: "", 
         jobExperience: "", 
         jobVacancy: 0, 
-        // jobDeadline: ""
     });
 
     const [error, setError] = useState({
@@ -43,7 +42,6 @@ export default function PostAJob() {
         jobType: "", 
         jobExperience: "", 
         jobVacancy: "", 
-        // jobDeadline: ""
     });
 
     const handleSubmit = async (e) => {
@@ -90,10 +88,7 @@ export default function PostAJob() {
             setError({ ...error, job_vacancy: "job_vacancy Field is required" })
             return;
         }
-        // if (!formData.job_deadline) {
-        //     setError({ ...error, job_deadline: "job_deadline Field is required" })
-        //     return;
-        // }
+      
 
         console.log(user);
         if (user == null) {

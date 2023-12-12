@@ -12,15 +12,7 @@ export default function Intro() {
   const [doneSearch, setDoneSearch] = useState(false);
   
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const filteredJobs = jobData?.filter((job) => {
-      let x = job?.job_category;
-      return x?.toUpperCase() === search?.toUpperCase().trim();
-    });
-    setFilteredJobs(filteredJobs);
-    setDoneSearch(true);
-  };
+ 
 
   return (
     <>
@@ -34,33 +26,7 @@ export default function Intro() {
             2400 Peoples are daily search in this portal, 100 user added job
             portal!
           </p>
-          <div className=" flex flex-col sm:flex-row items-center justify-center mb-6 w-full md:px-4 py-4">
-            <BiSearchAlt className="text-2xl text-orange-600 mx-2 hidden sm:flex" />
-            <input
-              onChange={(e) => setSearch(e.target.value)}
-              type="text"
-              placeholder="Search Jobs with Job categories"
-              className="w-full sm:w-3/4 h-full px-4 bg-white text-base py-2 outline-none border-2 border-gray-300 focus:border-orange-600 rounded-lg transition-all duration-300 ease-in-out shadow-sm focus:shadow-md"
-            />
-            <button
-              onClick={handleSearch}
-              className="px-4 py-2 mt-4 sm:mt-0 sm:ml-4 border border-orange-600 rounded-lg uppercase tracking-widest text-white bg-orange-600 transition-all duration-300 hover:bg-transparent hover:text-orange-600 font-semibold text-base"
-            >
-              Search
-            </button>
-          </div>
-
-          <div className=" w-full px-2 py-2 flex items-center justify-start flex-wrap">
-            <div className="flex items-center justify-center">
-              <BsFillBookmarkFill className="text-orange-600 text-xl mx-2" />
-              <h1 className="font-semibold text-lg">Suggest Tag : </h1>
-            </div>
-            <div className="flex   items-center justify-center px-4 flex-wrap">
-              <p className="px-2  text-gray-600">Coach</p>
-              <p className="px-2  text-gray-600">Manager</p>
-              <p className="px-2  text-gray-600">Mental Coach</p>
-            </div>
-          </div>
+          
         </div>
         <div className="w-3/6 my-2 h-full bg-gray-200 hidden items-center justify-center flex-col p-20 lg:flex">
           <Image

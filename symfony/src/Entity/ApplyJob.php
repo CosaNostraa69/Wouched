@@ -32,8 +32,6 @@ class ApplyJob
     #[ORM\Column(type: Types::TEXT)]
     private ?string $about = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $cv = null;
 
     #[ORM\Column(length: 255)]
     private ?string $status = null;
@@ -82,18 +80,6 @@ class ApplyJob
     public function setAbout(string $about): static
     {
         $this->about = $about;
-
-        return $this;
-    }
-
-    public function getCv(): ?string
-    {
-        return $this->cv;
-    }
-
-    public function setCv(string $cv): static
-    {
-        $this->cv = $cv;
 
         return $this;
     }

@@ -21,11 +21,20 @@ export default function ApplicationsDataTable({ application }) {
     setFilteredData(Data);
   }, [Data]);
 
+  const updateApplicationStatus = (id, newStatus) => {
+    setData((currentData) => 
+      currentData.map((app) => 
+        app.id === id ? { ...app, status: newStatus } : app
+      )
+    );
+  };
+
   const handleAcceptStatus = async (id) => {
     const data = { id, status: "approved" };
     const res = await change_application_status(data);
     if (res.success) {
-      router.push("/User/postedJob");
+      updateApplicationStatus(id, "approved");
+      toast.success("Application status updated to approved");
     } else {
       toast.error(res.message);
     }
@@ -35,21 +44,13 @@ export default function ApplicationsDataTable({ application }) {
     const data = { id, status: "rejected" };
     const res = await change_application_status(data);
     if (res.success) {
-      router.push("/User/postedJob");
+      updateApplicationStatus(id, "rejected");
+      toast.success("Application status updated to rejected");
     } else {
       toast.error(res.message);
     }
   };
 
-  const handleDownloadCV = async (name) => {
-    const fileUrl = `/uploads/${name}`;
-    const link = document.createElement("a");
-    link.href = fileUrl;
-    link.download = "cv.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   const columns = [
     {
@@ -62,40 +63,17 @@ export default function ApplicationsDataTable({ application }) {
       selector: (row) => row?.email,
       compact: true,
     },
-    // {
-    //   name: "Status",
-    //   selector: (row) => (
-    //     <p
-    //       className={`uppercase font-semibold ${
-    //         row?.status === "approved" ? "text-green-500" : ""
-    //       }  ${row?.status === "rejected" ? "text-red-600" : ""}`}
-    //     >
-    //       {row?.status}
-    //     </p>
-    //   ),
-    // },
     {
-      name: "CV",
-      selector: (row) => (
-        <button
-          onClick={() => handleDownloadCV(row?.cv)}
-          className="w8 h-8 md:w-10 md:h-10 rounded-full border-2 border-indigo-600 flex items-center justify-center hover:bg-indigo-600 transition-all duration-700"
-        >
-          <img
-            width="24"
-            height="24"
-            src="https://img.icons8.com/material-outlined/24/download--v1.png"
-            alt="download--v1"
-          />{" "}
-        </button>
-      ),
+      name: 'Status',
+      selector: row => row.status, 
     },
+   
     {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center justify-start space-x-2">
           <button
-            onClick={() => router.push(`/User/applicationDetail/${row?._id}`)}
+            onClick={() => router.push(`/User/applicationDetail/${row?.id}`)}
             className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-indigo-600 flex items-center justify-center hover:bg-indigo-600 transition-all duration-700"
           >
             <img
@@ -106,7 +84,7 @@ export default function ApplicationsDataTable({ application }) {
             />{" "}
           </button>
           <button
-            onClick={() => handleAcceptStatus(row?._id)}
+            onClick={() => handleAcceptStatus(row?.id)}
             className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-green-600 flex items-center justify-center hover:bg-green-600 transition-all duration-700"
           >
             <img
@@ -117,7 +95,7 @@ export default function ApplicationsDataTable({ application }) {
             />{" "}
           </button>
           <button
-            onClick={() => handleRejectStatus(row?._id)}
+            onClick={() => handleRejectStatus(row?.id)}
             className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-red-600 flex items-center justify-center hover:bg-red-600 transition-all duration-700"
           >
             <img

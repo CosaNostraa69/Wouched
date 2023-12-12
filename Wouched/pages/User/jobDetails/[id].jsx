@@ -17,7 +17,6 @@ import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { InfinitySpin } from 'react-loader-spinner'
 import useSWR from 'swr'
-import { book_mark_job } from '@/Services/job/bookmark'
 
 
 
@@ -63,17 +62,7 @@ export default function JobDetails() {
     }
 
 
-    const handleBookMark = async (user, token, _id) => {
-        console.log("token", token);
-        if (!user && token) return toast.error('Please Login First');
-        const res = await book_mark_job(user?.id, id, user?.token)
-        if (res.success) {
-            toast.success('Job Bookmarked Successfully')
-        }
-        else {
-            toast.error('Error Occured')
-        }
-    }
+   
 
     return (
         <>
@@ -140,10 +129,10 @@ export default function JobDetails() {
                                     <div className='flex items-center justify-center'>
                                         {
                                             JobDetails?.email === user?.email ? (
-                                                <p className='text-xs text-red-500'>unable Apply to your Own jobs {user?.email}</p>
+                                                <p className='text-xs text-red-500'>Unable to Apply {user?.email}</p>
                                             ) : (
                                                 <div className='flex items-center justify-center  '>
-                                                    <BsFillBookmarkCheckFill onClick={handleBookMark} className='text-indigo-600 text-4xl cursor-pointer  mx-2'/>
+                                                   
                                                     <button onClick={handleApply} className='md:px-6 md:py-3 px-3 py-2 mt-2 md:mt-0 bg-indigo-500 rounded text-base tracking-widest uppercase transition-all duration-700 hover:bg-indigo-900 text-white  '>Apply Position</button>
                                                 </div>
                                             )

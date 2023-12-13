@@ -19,8 +19,8 @@ export default function ApplyJob() {
         email: '', 
         about: '', 
         status:"",
-        job:  `/api/jobs/11`, 
-        user: `/api/users/11` 
+        job:  `/api/jobs/15`, 
+        user: `/api/users/15` 
     });
     const { name, email, about, job } = formikData;
 

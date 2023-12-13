@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import Cookies from 'js-cookie';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from '@/Services/authContext'; 
+import Footer from '@/components/Footer';
 
 export default function App({ Component, pageProps: { session, ...pageProps }, }) {
   const router = useRouter();
@@ -28,7 +29,9 @@ export default function App({ Component, pageProps: { session, ...pageProps }, }
     <Provider store={store}>
       <AuthProvider> 
         <Component {...pageProps} />
+        <Footer />
       </AuthProvider>
     </Provider>
+    
   )
 }

@@ -28,9 +28,6 @@ export default function ApplyJob() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        console.log("Job ID:", job, "User Id:", user, "token", token, "Name", name);
-        console.log("Sending data:", formikData);
 
         
 
@@ -72,8 +69,6 @@ export default function ApplyJob() {
         try {
 
 
-
-            console.log(form)
             const res = await apply_job(formikData);
             toast.success(res.data.about);
             router.push('/')

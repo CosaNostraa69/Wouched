@@ -94,17 +94,6 @@ export default function ApplicationsDataTable({ application }) {
       cell: (row) => (
         <div className="flex items-center justify-start space-x-2">
           <button
-            onClick={() => router.push(`/User/applicationDetail/${row?.id}`)}
-            className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-indigo-600 flex items-center justify-center hover:bg-indigo-600 transition-all duration-700"
-          >
-            <img
-              width="32"
-              height="32"
-              src="https://img.icons8.com/windows/32/details-popup.png"
-              alt="details-popup"
-            />{" "}
-          </button>
-          <button
             onClick={() => handleAcceptStatus(row?.id)}
             className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-green-600 flex items-center justify-center hover:bg-green-600 transition-all duration-700"
           >

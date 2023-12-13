@@ -153,9 +153,7 @@ export default function JobDetails() {
                                         <p className=' text-sm text-gray-800 mx-1'>{JobDetails?.job_vacancy}</p>
                                     </div>
                                     <div className='flex items-center justify-start mb-3'>
-                                        <BsFillCalendar2DateFill className='text-base font-semibold text-indigo-600' />
-                                        <p className='font-semibold text-base mx-1'>Dead Line</p>
-                                        <p className=' text-sm text-gray-800 mx-1'>{new Date(`${JobDetails?.job_deadline}`).toLocaleDateString('en-GB')}</p>
+                                     
                                     </div>
                                     <div className='flex items-center justify-start mb-3'>
                                         <HiOutlineStar className='text-base font-semibold text-indigo-600' />
@@ -205,9 +203,7 @@ export default function JobDetails() {
                                                             <p className=' text-sm text-gray-800 mx-1'>{item?.job_vacancy}</p>
                                                         </div>
                                                         <div className='flex px-1 md:px-4 items-center justify-center mb-2'>
-                                                            <BsFillCalendar2DateFill className='text-base font-semibold text-indigo-600' />
-                                                            <p className='font-semibold text-xs md:text-base mx-1'>Dead Line</p>
-                                                            <p className=' text-xs text-gray-800 mx-1'>{new Date(`${item?.job_deadline}`).toLocaleDateString('en-GB')}</p>
+                                                        
                                                         </div>
                                                     </div>
                                                     <button onClick={() => router.push(`/frontend/jobDetails/${item?._id}`)} className='my-2 py-2 px-4  border border-indigo-600 uppercase  rounded flex items-center justify-center transition-all duration-700 hover:bg-indigo-600 hover:text-white text-indigo-600 font-semibold'>View Detail<AiOutlineArrowRight className='mx-2 text-xl' /></button>

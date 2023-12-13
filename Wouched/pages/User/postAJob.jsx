@@ -91,7 +91,6 @@ export default function PostAJob() {
         }
       
 
-        console.log(user);
         if (user == null) {
             return toast.error("Please Login First");
         }

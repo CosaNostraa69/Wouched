@@ -213,20 +213,3 @@ export const change_application_status = async (formData) => {
 }
 
 
-
-export const get_application_details = async (id) => {
-    try {
-        const res = await fetch(`http://127.0.0.1:8000/api/job/applications/${id}`, {
-            method: 'GET',
-            headers : {'Authorization': `Bearer ${Cookies.get('token')}`}
-        });
-        if (!res.ok) {
-            throw new Error(`Network response was not ok: ${res.status}`);
-        }
-        const data = await res.json();
-        return { data, error: null };
-    } catch (error) {
-        console.log('error in getting application details (service) => ', error);
-        return { data: null, error };
-    }
-}

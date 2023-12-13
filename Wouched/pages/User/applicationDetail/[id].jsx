@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import { get_application_details } from "@/Services/job";
 import { InfinitySpin } from "react-loader-spinner";
 import NavBar from "@/components/NavBar";
 import { toast } from "react-toastify";
@@ -21,9 +20,6 @@ export default function ApplicationsDetail() {
     }
   }, [user, userId, Cookies]);
 
-  const { data, error, isLoading } = useSWR("/get-application-details", () =>
-    get_application_details(id)
-  );
 
   if (error) return toast.error(error) && router.push("/frontend/postedJob");
 

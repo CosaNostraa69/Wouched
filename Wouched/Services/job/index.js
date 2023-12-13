@@ -193,8 +193,6 @@ export const get_all_applications = async (id) => {
 
 export const change_application_status = async (formData) => {
     try {
-        console.log("Data:");
-        console.log(formData);
         const res = await fetch(`http://127.0.0.1:8000/api/apply_jobs/${formData.id}`, {
             method: 'PATCH',
             headers: {

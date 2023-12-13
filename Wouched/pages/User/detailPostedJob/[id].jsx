@@ -24,13 +24,14 @@ export default function PostedJobsDetails() {
         if (user && token && id) {
             get_all_applications(id, token)
                 .then(res => {
-                    setApplication(res.data); 
+                    setApplication(res.data);
                 })
                 .catch(err => {
                     toast.error(err.message || 'Error fetching applications');
                 });
         }
     }, [user, token, id]);
+    
 
     return (
         <>

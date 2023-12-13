@@ -21,13 +21,18 @@ export default function ApplicationsDataTable({ application }) {
     setFilteredData(Data);
   }, [Data]);
 
-  const updateApplicationStatus = (id, newStatus) => {
-    setData((currentData) => 
-      currentData.map((app) => 
-        app.id === id ? { ...app, status: newStatus } : app
-      )
+  const updateApplicationStatus = (id, status) => {
+    const updatedData = Data.map((item) =>
+        item.id === id ? { ...item, status: status } : item
     );
-  };
+
+    setData(updatedData);
+
+    setFilteredData([]);
+    setTimeout(() => setFilteredData(updatedData), 0);
+};
+
+
 
   const handleAcceptStatus = async (id) => {
     const data = { id, status: "approved" };
@@ -65,7 +70,23 @@ export default function ApplicationsDataTable({ application }) {
     },
     {
       name: 'Status',
-      selector: row => row.status, 
+      selector: (row) => row?.status,
+      compact: true,
+      cell: (row) => (
+        <div className="flex items-center justify-center">
+          <span
+            className={`px-2 py-1 rounded-full ${
+              row?.status === "pending"
+                ? "bg-yellow-400 text-white"
+                : row?.status === "approved"
+                ? "bg-green-400 text-white"
+                : "bg-red-400 text-white"
+            }`}
+          >
+            {row?.status}
+          </span>
+        </div>
+      ),
     },
    
     {

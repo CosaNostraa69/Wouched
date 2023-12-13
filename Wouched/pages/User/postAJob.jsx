@@ -11,6 +11,7 @@ export default function PostAJob() {
     const { user } = useAuth();
     const router = useRouter();
     const [isClient, setIsClient] = useState(false);
+    
 
     useEffect(() => {
       setIsClient(true);
